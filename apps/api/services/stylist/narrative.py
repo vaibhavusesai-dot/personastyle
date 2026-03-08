@@ -5,9 +5,25 @@ Calls Claude to produce a personalised Style Narrative.
 Falls back to a rich template-generated narrative if ANTHROPIC_API_KEY is unset.
 """
 from __future__ import annotations
-import os, json, textwrap
+import os, json, textwrap, re
 
 _RULES_PATH = os.path.join(os.path.dirname(__file__), "Styling_Rules.json")
+
+# FIX #11 — allowlists for enum-typed fields used in LLM prompts
+_VALID_FACE_SHAPES  = {"Oval","Round","Square","Heart","Diamond","Oblong","Triangle"}
+_VALID_BODY_TYPES   = {"Hourglass","Rectangle","InvertedTriangle","Triangle","Apple","Athletic"}
+_VALID_UNDERTONES   = {"warm","cool","neutral"}
+_VALID_CONTRASTS    = {"low","medium","high"}
+_VALID_GENDERS      = {"male","female","non-binary","prefer_not_to_say"}
+
+def _safe_str(value: str, allowed: set, fallback: str) -> str:
+    """Return value only if it's in the allowlist, else fallback. Prevents prompt injection."""
+    return value if value in allowed else fallback
+
+def _sanitize_tag_list(tags: str, max_len: int = 120) -> str:
+    """Strip control characters and limit length for tags inserted into prompts."""
+    cleaned = re.sub(r"[^\w\s,\-()]", "", tags)
+    return cleaned[:max_len]
 
 def _load_prompt_template() -> dict:
     with open(_RULES_PATH) as f:
@@ -95,32 +111,38 @@ def generate_narrative(
     clothing_tags: list,
     age: int,
     gender: str,
-) -> tuple[str, str, str, int | None]:
-    """
-    Returns (narrative, style_archetype, model_used, tokens_used).
-    """
-    face_shape   = facial_metrics.get("face_shape", "Oval")
-    body_type    = body_metrics.get("body_type", "Rectangle")
-    season_var   = color_profile.get("season_variant", "True Spring")
-    thirds       = facial_metrics.get("facial_thirds_ratio", [0.33, 0.33, 0.34])
-    canthal      = facial_metrics.get("canthal_tilt", 2.0)
-    jaw          = facial_metrics.get("jawline_angle", 130.0)
-    undertone    = color_profile.get("skin_undertone", "neutral")
-    contrast     = color_profile.get("overall_contrast", "medium")
-    palette      = color_profile.get("recommended_palette", [])
-    archetype    = _ARCHETYPES.get((face_shape, body_type), "Modern Individual")
+) -> "tuple[str, str, str, int | None]":
+    """Returns (narrative, style_archetype, model_used, tokens_used)."""
 
-    h_tags = ", ".join(r.get("name", "") for r in hairstyle_tags[:3])
-    c_tags = ", ".join(r.get("name", "") for r in clothing_tags[:3])
-    colours= ", ".join(palette[:4])
+    # FIX #11 — validate all enum-typed fields against allowlists before prompt insertion
+    face_shape = _safe_str(facial_metrics.get("face_shape", "Oval"), _VALID_FACE_SHAPES, "Oval")
+    body_type  = _safe_str(body_metrics.get("body_type", "Rectangle"), _VALID_BODY_TYPES, "Rectangle")
+    undertone  = _safe_str(color_profile.get("skin_undertone", "neutral"), _VALID_UNDERTONES, "neutral")
+    contrast   = _safe_str(color_profile.get("overall_contrast", "medium"), _VALID_CONTRASTS, "medium")
+    safe_gender = _safe_str(gender, _VALID_GENDERS, "prefer_not_to_say")
+    safe_age   = max(13, min(120, int(age)))   # clamp to valid range
+
+    season_var  = color_profile.get("season_variant", "True Spring")
+    thirds      = facial_metrics.get("facial_thirds_ratio", [0.33, 0.33, 0.34])
+    canthal     = float(facial_metrics.get("canthal_tilt", 2.0))
+    jaw         = float(facial_metrics.get("jawline_angle", 130.0))
+    palette     = color_profile.get("recommended_palette", [])
+    archetype   = _ARCHETYPES.get((face_shape, body_type), "Modern Individual")
+
+    # FIX #11 — sanitize tag strings: strip control chars, limit length
+    h_tags  = _sanitize_tag_list(", ".join(r.get("name", "") for r in hairstyle_tags[:3]))
+    c_tags  = _sanitize_tag_list(", ".join(r.get("name", "") for r in clothing_tags[:3]))
+    colours = _sanitize_tag_list(", ".join(str(c) for c in palette[:4]))
 
     context = dict(
         face_shape=face_shape, body_type=body_type, season_variant=season_var,
         facial_thirds=thirds, canthal_tilt=canthal, jawline_angle=jaw,
-        skin_undertone=undertone, overall_contrast=contrast, age=age, gender=gender,
+        skin_undertone=undertone, overall_contrast=contrast,
+        age=safe_age, gender=safe_gender,
         hairstyle_tags=h_tags, clothing_tags=c_tags, recommended_colours=colours,
         upper_third=f"{thirds[0]*100:.0f}", middle_third=f"{thirds[1]*100:.0f}",
-        lower_third=f"{thirds[2]*100:.0f}", confidence=facial_metrics.get("face_shape_confidence", 0.8),
+        lower_third=f"{thirds[2]*100:.0f}",
+        confidence=facial_metrics.get("face_shape_confidence", 0.8),
     )
 
     api_key = os.getenv("ANTHROPIC_API_KEY", "")
@@ -134,21 +156,21 @@ def generate_narrative(
         sys_prompt  = _TMPL.get("system_prompt", "You are a professional stylist.")
         user_tmpl   = _TMPL.get("user_prompt_template", "Describe the style for: {face_shape}")
         user_prompt = user_tmpl.format(**{
-            "face_shape": face_shape,
-            "confidence": f"{context['confidence']*100:.0f}",
-            "body_type": body_type,
+            "face_shape":     face_shape,
+            "confidence":     f"{context['confidence']*100:.0f}",
+            "body_type":      body_type,
             "season_variant": season_var,
-            "upper_third": context["upper_third"],
-            "middle_third": context["middle_third"],
-            "lower_third": context["lower_third"],
-            "canthal_tilt": canthal,
-            "jawline_angle": jaw,
+            "upper_third":    context["upper_third"],
+            "middle_third":   context["middle_third"],
+            "lower_third":    context["lower_third"],
+            "canthal_tilt":   canthal,
+            "jawline_angle":  jaw,
             "skin_undertone": undertone,
             "overall_contrast": contrast,
-            "age": age,
-            "gender": gender,
+            "age":            safe_age,
+            "gender":         safe_gender,
             "hairstyle_tags": h_tags,
-            "clothing_tags": c_tags,
+            "clothing_tags":  c_tags,
             "recommended_colours": colours,
         })
 
@@ -162,5 +184,5 @@ def generate_narrative(
         tokens    = msg.usage.input_tokens + msg.usage.output_tokens
         return narrative, archetype, "claude-sonnet-4-6", tokens
 
-    except Exception as e:
+    except Exception:
         return _fallback_narrative(context), archetype, "template-fallback", None

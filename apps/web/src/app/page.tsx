@@ -48,7 +48,8 @@ interface SessionData {
   error?: string;
 }
 
-const API = "http://localhost:8000";
+// FIX #14 — never hardcode API URL; always read from env var
+const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -499,15 +500,17 @@ function Results({ data }: { data: SessionData }) {
 // ─── App Shell ────────────────────────────────────────────────────────────────
 
 export default function App() {
-  const [step, setStep]         = useState<Step>("landing");
-  const [meta, setMeta]         = useState<Metadata | null>(null);
-  const [selfieB64, setSelfieB64]   = useState("");
-  const [bodyB64, setBodyB64]       = useState("");
+  const [step, setStep]               = useState<Step>("landing");
+  const [meta, setMeta]               = useState<Metadata | null>(null);
+  const [selfieB64, setSelfieB64]     = useState("");
+  const [bodyB64, setBodyB64]         = useState("");
   const [selfiePreview, setSelfiePreview] = useState("");
   const [bodyPreview, setBodyPreview]     = useState("");
-  const [session, setSession]   = useState<SessionData | null>(null);
-  const [error, setError]       = useState<string | null>(null);
-  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [session, setSession]         = useState<SessionData | null>(null);
+  const [error, setError]             = useState<string | null>(null);
+  // FIX #4 — store session token in memory (not localStorage) to send with polls
+  const sessionTokenRef = useRef<string>("");
+  const pollRef         = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const stopPolling = () => { if (pollRef.current) clearInterval(pollRef.current); };
 
@@ -529,12 +532,17 @@ export default function App() {
         }),
       });
       if (!res.ok) throw new Error(`API error ${res.status}`);
-      const { session_id } = await res.json();
+      const { session_id, session_token } = await res.json();
 
-      // Poll until complete
+      // FIX #4 — store token in ref (not state/localStorage) to avoid exposure
+      sessionTokenRef.current = session_token;
+
+      // Poll until complete, sending token every request
       pollRef.current = setInterval(async () => {
         try {
-          const r = await fetch(`${API}/api/v1/session/${session_id}`);
+          const r = await fetch(`${API}/api/v1/session/${session_id}`, {
+            headers: { "X-Session-Token": sessionTokenRef.current },
+          });
           const d: SessionData = await r.json();
           if (d.status === "complete") {
             stopPolling();
@@ -548,8 +556,9 @@ export default function App() {
         } catch { /* keep polling */ }
       }, 1500);
 
-    } catch (e: any) {
-      setError(e.message ?? "Failed to connect to API. Is the backend running on port 8000?");
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Failed to connect to API.";
+      setError(msg);
       setStep("selfie");
     }
   }, [meta, selfieB64, bodyB64]);

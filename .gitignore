@@ -27,6 +27,9 @@ Thumbs.db
 *.log
 /tmp/
 
-# Secrets
+# Secrets — never commit real env files
+.env
 .env.local
 .env.production
+.env.*.local
+apps/api/.env

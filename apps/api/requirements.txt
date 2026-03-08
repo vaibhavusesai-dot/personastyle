@@ -5,6 +5,7 @@
 fastapi==0.111.0
 uvicorn[standard]==0.29.0
 python-multipart==0.0.9
+slowapi==0.1.9             # Rate limiting middleware
 
 # Computer Vision
 mediapipe==0.10.14
