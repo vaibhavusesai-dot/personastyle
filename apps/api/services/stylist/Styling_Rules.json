@@ -1,0 +1,567 @@
+{
+  "$schema": "https://personastyle.app/schemas/styling-rules/v1.0",
+  "version": "1.0.0",
+  "description": "PersonaStyle Styling Rules Engine — maps facial metrics, body type, and color profile to curated fashion and grooming tags.",
+
+  "face_shape_rules": {
+    "_comment": "Keyed by FaceShape enum value. Each entry lists hairstyle tags to recommend (+) and avoid (-).",
+    "Oval": {
+      "description": "Balanced proportions — most styles work. Goal: maintain natural symmetry.",
+      "hairstyle_tags": {
+        "recommend": [
+          "medium-length", "layered", "curtain-bangs", "side-part",
+          "textured-waves", "blunt-cut", "bun", "ponytail"
+        ],
+        "avoid": ["extreme-volume-crown", "very-wide-sides"]
+      },
+      "beard_tags": {
+        "recommend": ["stubble", "full-beard", "goatee"],
+        "avoid": []
+      },
+      "glasses_tags": {
+        "recommend": ["wayfarer", "aviator", "round", "cat-eye", "rectangle"],
+        "avoid": []
+      },
+      "accessory_tags": ["statement-earrings", "layered-necklaces"]
+    },
+
+    "Round": {
+      "description": "Wide cheekbones, soft jawline. Goal: elongate and add definition.",
+      "hairstyle_tags": {
+        "recommend": [
+          "long-layers", "high-top-fade", "side-swept", "straight-down",
+          "quiff", "pompadour", "deep-side-part", "undercut"
+        ],
+        "avoid": [
+          "blunt-bob", "full-fringe", "very-short-crop", "wide-curly-afro",
+          "chin-length-bob", "mushroom-cut"
+        ]
+      },
+      "beard_tags": {
+        "recommend": ["pointed-goatee", "anchor-beard", "chin-strap"],
+        "avoid": ["full-round-beard", "mutton-chops"]
+      },
+      "glasses_tags": {
+        "recommend": ["rectangle", "browline", "angular", "narrow-aviator"],
+        "avoid": ["round", "oversized-circle"]
+      },
+      "accessory_tags": ["long-pendant-earrings", "long-necklaces", "v-neck-scarf"]
+    },
+
+    "Square": {
+      "description": "Strong jaw, defined angles. Goal: soften the jawline and add height.",
+      "hairstyle_tags": {
+        "recommend": [
+          "side-swept-bangs", "soft-waves", "layers-around-jawline",
+          "curtain-bangs", "long-layers", "textured-top", "tousled"
+        ],
+        "avoid": [
+          "blunt-ends-at-jaw", "harsh-straight-fringe", "boxy-cut",
+          "flat-top", "very-short-sides"
+        ]
+      },
+      "beard_tags": {
+        "recommend": ["short-stubble", "circle-beard"],
+        "avoid": ["square-box-beard", "wide-full-beard"]
+      },
+      "glasses_tags": {
+        "recommend": ["round", "oval", "rimless", "cat-eye"],
+        "avoid": ["square-thick-frame", "angular-rectangle"]
+      },
+      "accessory_tags": ["curved-hoop-earrings", "round-pendants", "soft-scarves"]
+    },
+
+    "Heart": {
+      "description": "Wide forehead, narrow chin. Goal: balance top with bottom, widen jaw visually.",
+      "hairstyle_tags": {
+        "recommend": [
+          "chin-length-bob", "lob", "side-part", "medium-waves",
+          "layered-ends", "jaw-length-curls", "chignon"
+        ],
+        "avoid": [
+          "heavy-fringe", "very-short-pixie", "volume-at-crown",
+          "wide-temple-poof", "slicked-back"
+        ]
+      },
+      "beard_tags": {
+        "recommend": ["full-beard", "extended-goatee", "mutton-chops"],
+        "avoid": ["anchor-beard", "chin-strap-only"]
+      },
+      "glasses_tags": {
+        "recommend": ["bottom-heavy-frame", "oval", "light-rimless", "round"],
+        "avoid": ["cat-eye", "browline", "top-heavy-frame"]
+      },
+      "accessory_tags": ["chandelier-earrings", "wide-collar-necklaces", "statement-bib"]
+    },
+
+    "Diamond": {
+      "description": "Narrow forehead and chin, prominent cheekbones. Goal: widen forehead and chin.",
+      "hairstyle_tags": {
+        "recommend": [
+          "full-fringe", "side-swept-bangs", "wide-updos", "volume-at-crown",
+          "long-layers", "chin-length-bob", "textured-ends"
+        ],
+        "avoid": [
+          "slicked-back", "very-short-crop", "center-part-without-bangs",
+          "volume-at-cheekbones"
+        ]
+      },
+      "beard_tags": {
+        "recommend": ["full-beard", "wide-goatee"],
+        "avoid": ["narrow-goatee", "soul-patch"]
+      },
+      "glasses_tags": {
+        "recommend": ["cat-eye", "oval", "rimless", "browline"],
+        "avoid": ["narrow-frame", "small-round"]
+      },
+      "accessory_tags": ["wide-headbands", "ear-cuffs", "statement-earrings"]
+    },
+
+    "Oblong": {
+      "description": "Long, narrow face. Goal: add width, reduce length illusion.",
+      "hairstyle_tags": {
+        "recommend": [
+          "full-fringe", "layered-bob", "shoulder-length", "wide-curls",
+          "blunt-cut", "wide-waves", "curtain-bangs"
+        ],
+        "avoid": [
+          "very-long-straight", "center-part-no-bangs", "tall-pompadour",
+          "long-beard", "slicked-back-tight"
+        ]
+      },
+      "beard_tags": {
+        "recommend": ["full-wide-beard", "mutton-chops"],
+        "avoid": ["pointed-goatee", "soul-patch", "very-long-beard"]
+      },
+      "glasses_tags": {
+        "recommend": ["oversized", "wide-rectangle", "wide-square", "bold-browline"],
+        "avoid": ["small-round", "narrow-rimless", "tall-frame"]
+      },
+      "accessory_tags": ["wide-hats", "horizontal-stripe-headbands", "chokers"]
+    },
+
+    "Triangle": {
+      "description": "Narrow forehead, wide jaw. Goal: add width at top, reduce jaw emphasis.",
+      "hairstyle_tags": {
+        "recommend": [
+          "volume-at-crown", "layered-fringe", "wide-updo", "side-swept-with-volume",
+          "textured-quiff", "puff-at-top"
+        ],
+        "avoid": [
+          "long-straight-flat", "bob-ending-at-jaw", "heavy-at-bottom",
+          "slicked-back"
+        ]
+      },
+      "beard_tags": {
+        "recommend": ["short-stubble-only"],
+        "avoid": ["wide-full-beard", "mutton-chops"]
+      },
+      "glasses_tags": {
+        "recommend": ["cat-eye", "top-heavy-frame", "browline", "wide-top"],
+        "avoid": ["narrow-aviator", "rimless"]
+      },
+      "accessory_tags": ["statement-earrings-at-top", "wide-headbands"]
+    }
+  },
+
+  "body_type_rules": {
+    "_comment": "Keyed by BodyType enum. Maps to clothing silhouette tags.",
+    "Hourglass": {
+      "description": "Shoulder and hip width balanced, defined waist. Goal: accentuate natural curves.",
+      "clothing_tags": {
+        "tops": {
+          "recommend": ["wrap-top", "fitted-blouse", "bodysuit", "peplum", "tucked-in"],
+          "avoid": ["boxy-oversized", "shapeless-tunic"]
+        },
+        "bottoms": {
+          "recommend": ["high-waist-jeans", "pencil-skirt", "A-line-skirt", "fitted-trouser"],
+          "avoid": ["drop-crotch", "extremely-wide-leg-no-belt"]
+        },
+        "outerwear": {
+          "recommend": ["belted-coat", "wrap-blazer", "fitted-jacket"],
+          "avoid": ["boxy-overcoat", "unstructured-duster"]
+        },
+        "silhouette_principle": "Define the waist; echo curves without adding bulk."
+      },
+
+      "Inverted-Triangle": {
+        "_comment": "NOTE: uses hyphen key when body_type comes from pose estimator with alternate naming"
+      }
+    },
+
+    "Rectangle": {
+      "description": "Similar shoulder, waist, and hip measurements. Goal: create the illusion of curves.",
+      "clothing_tags": {
+        "tops": {
+          "recommend": ["ruffled", "peplum", "wrap-top", "off-shoulder", "embellished-neckline"],
+          "avoid": ["plain-boxy-tee"]
+        },
+        "bottoms": {
+          "recommend": ["full-skirt", "wide-leg-trouser", "paperbag-waist", "pleated"],
+          "avoid": ["straight-cut-without-waist-detail"]
+        },
+        "outerwear": {
+          "recommend": ["double-breasted", "belted", "trench-coat"],
+          "avoid": []
+        },
+        "silhouette_principle": "Add volume at bust or hips; belt the waist wherever possible."
+      }
+    },
+
+    "InvertedTriangle": {
+      "description": "Broad shoulders, narrow hips. Goal: balance proportions downward.",
+      "clothing_tags": {
+        "tops": {
+          "recommend": ["v-neck", "scoop-neck", "dark-solid-top", "raglan", "soft-shoulder"],
+          "avoid": ["boat-neck", "strong-shoulder-pad", "puffed-sleeve", "horizontal-stripe-top"]
+        },
+        "bottoms": {
+          "recommend": [
+            "wide-leg-trouser", "A-line-skirt", "flared-jeans",
+            "maxi-skirt", "cargo-pant", "pleated-trouser"
+          ],
+          "avoid": ["straight-leg-skinny", "pencil-skirt", "tapered-trouser"]
+        },
+        "outerwear": {
+          "recommend": ["long-open-coat", "duster", "single-breasted"],
+          "avoid": ["strong-shoulder-blazer", "cape"]
+        },
+        "silhouette_principle": "Draw the eye downward; volume below the waist, minimalism above."
+      }
+    },
+
+    "Triangle": {
+      "description": "Narrow shoulders, wide hips. Goal: balance proportions upward.",
+      "clothing_tags": {
+        "tops": {
+          "recommend": [
+            "boat-neck", "off-shoulder", "structured-shoulder", "embellished-shoulder",
+            "bright-coloured-top", "puffed-sleeve", "horizontal-stripe-top"
+          ],
+          "avoid": ["dark-plain-top-with-no-detail", "halter-neck"]
+        },
+        "bottoms": {
+          "recommend": ["dark-solid-colour", "straight-leg", "monochromatic"],
+          "avoid": ["ruffled-skirt", "wide-leg-with-pattern", "bold-print-trouser"]
+        },
+        "outerwear": {
+          "recommend": ["structured-blazer", "double-breasted", "bold-shoulder-coat"],
+          "avoid": ["long-duster", "waterfall-cardigan"]
+        },
+        "silhouette_principle": "Add width and interest at the shoulders; keep hips minimal."
+      }
+    },
+
+    "Apple": {
+      "description": "Fuller midsection, undefined waist. Goal: elongate torso and draw eye away from centre.",
+      "clothing_tags": {
+        "tops": {
+          "recommend": [
+            "empire-waist", "V-neck", "wrap-top", "tunic-length",
+            "dark-centre-panel", "vertical-stripe"
+          ],
+          "avoid": ["cropped-top", "clingy-knit", "wide-belt-at-natural-waist"]
+        },
+        "bottoms": {
+          "recommend": ["straight-leg", "bootcut", "high-rise-with-tummy-panel", "wide-leg"],
+          "avoid": ["low-rise", "hipster-cut", "gathered-waist"]
+        },
+        "outerwear": {
+          "recommend": ["long-cardigan", "open-front-blazer", "longline-jacket"],
+          "avoid": ["cropped-jacket", "fitted-at-hip"]
+        },
+        "silhouette_principle": "Create a long vertical line; float fabric over the midsection."
+      }
+    },
+
+    "Athletic": {
+      "description": "Well-defined, muscular physique with low body-fat silhouette.",
+      "clothing_tags": {
+        "tops": {
+          "recommend": ["fitted-crew-neck", "slim-fit-shirt", "polo", "layering-pieces"],
+          "avoid": ["very-baggy-oversized"]
+        },
+        "bottoms": {
+          "recommend": ["slim-straight-jeans", "chino", "fitted-jogger"],
+          "avoid": ["extremely-skinny-tight"]
+        },
+        "outerwear": {
+          "recommend": ["bomber-jacket", "slim-cut-blazer", "varsity-jacket"],
+          "avoid": []
+        },
+        "silhouette_principle": "Showcase natural physique with well-fitted, structured pieces."
+      }
+    }
+  },
+
+  "color_palette_rules": {
+    "_comment": "Keyed by SeasonVariant. Provides recommended and avoid hex palettes plus fabric/pattern guidance.",
+    "True Spring": {
+      "undertone": "warm",
+      "contrast": "medium",
+      "best_colours": ["#F4A460", "#E8C97A", "#ADCF8F", "#6BC3D2", "#E88C6D", "#FAE0A5"],
+      "avoid_colours": ["#000000", "#808080", "#C0C0C0", "#00008B"],
+      "clothing_guidance": {
+        "patterns": ["small-florals", "ditsy-print", "watercolour", "light-plaid"],
+        "fabrics": ["cotton", "linen", "lightweight-wool", "silk-crepe"],
+        "avoid_patterns": ["heavy-geometric", "stark-black-white"]
+      },
+      "makeup_guidance": {
+        "lip": ["coral", "peach", "warm-pink"],
+        "eye": ["warm-brown", "golden", "teal-liner"],
+        "blush": ["peach", "apricot"]
+      },
+      "hair_colour_guidance": {
+        "recommend": ["golden-blonde", "strawberry-blonde", "warm-chestnut", "copper"],
+        "avoid": ["ash-blonde", "cool-black", "platinum"]
+      }
+    },
+
+    "True Summer": {
+      "undertone": "cool",
+      "contrast": "low-to-medium",
+      "best_colours": ["#B0C4DE", "#C8A2C8", "#87CEEB", "#DDA0DD", "#E0D0E8", "#A8C5B5"],
+      "avoid_colours": ["#FF6600", "#8B4513", "#FFD700"],
+      "clothing_guidance": {
+        "patterns": ["soft-floral", "watercolour", "subtle-stripe", "tonal-print"],
+        "fabrics": ["chiffon", "jersey", "soft-knit", "silk"],
+        "avoid_patterns": ["bold-graphic", "high-contrast-stripe"]
+      },
+      "makeup_guidance": {
+        "lip": ["mauve", "rose", "soft-pink", "berry"],
+        "eye": ["grey", "lavender", "soft-plum"],
+        "blush": ["soft-rose", "dusty-pink"]
+      },
+      "hair_colour_guidance": {
+        "recommend": ["ash-blonde", "light-ash-brown", "cool-taupe"],
+        "avoid": ["warm-red", "golden-blonde", "orange-copper"]
+      }
+    },
+
+    "True Autumn": {
+      "undertone": "warm",
+      "contrast": "medium-to-high",
+      "best_colours": ["#8B4513", "#D2691E", "#CD853F", "#6B8E23", "#8B6914", "#A0522D"],
+      "avoid_colours": ["#FF69B4", "#00FFFF", "#E0E0E0"],
+      "clothing_guidance": {
+        "patterns": ["paisley", "animal-print", "geometric-earth", "ethnic-weave"],
+        "fabrics": ["suede", "leather", "heavy-knit", "corduroy", "tweed"],
+        "avoid_patterns": ["pastel-ditsy", "cool-watercolour"]
+      },
+      "makeup_guidance": {
+        "lip": ["terracotta", "brick-red", "warm-nude", "rust"],
+        "eye": ["bronze", "olive", "warm-brown", "deep-green"],
+        "blush": ["terracotta", "warm-peach", "bronze"]
+      },
+      "hair_colour_guidance": {
+        "recommend": ["auburn", "rich-chestnut", "deep-copper", "warm-mahogany"],
+        "avoid": ["platinum", "ash-blonde", "cool-black"]
+      }
+    },
+
+    "True Winter": {
+      "undertone": "cool",
+      "contrast": "high",
+      "best_colours": ["#000000", "#FFFFFF", "#0000CD", "#8B0000", "#2E0854", "#006400"],
+      "avoid_colours": ["#F4A460", "#ADCF8F", "#FAE0A5"],
+      "clothing_guidance": {
+        "patterns": ["bold-geometric", "graphic-print", "stark-stripe", "colour-block"],
+        "fabrics": ["structured-wool", "silk", "leather", "crisp-cotton"],
+        "avoid_patterns": ["soft-watercolour", "muted-earthy"]
+      },
+      "makeup_guidance": {
+        "lip": ["true-red", "berry", "plum", "deep-wine"],
+        "eye": ["charcoal", "navy", "deep-plum", "black-liner"],
+        "blush": ["cool-pink", "mauve", "berry"]
+      },
+      "hair_colour_guidance": {
+        "recommend": ["blue-black", "cool-brown", "dark-ash-brown", "platinum-blonde"],
+        "avoid": ["warm-red", "golden-blonde", "orange-copper"]
+      }
+    },
+
+    "Soft Autumn": {
+      "undertone": "warm-neutral",
+      "contrast": "low",
+      "best_colours": ["#C4A882", "#B8A090", "#8B9E7A", "#9E8060", "#C2B280", "#A89070"],
+      "avoid_colours": ["#000000", "#FFFFFF", "#FF00FF"],
+      "clothing_guidance": {
+        "patterns": ["muted-floral", "tonal-plaid", "soft-animal-print"],
+        "fabrics": ["cashmere", "brushed-cotton", "linen-blend"],
+        "avoid_patterns": ["high-contrast-graphic", "pure-black-white"]
+      },
+      "makeup_guidance": {
+        "lip": ["warm-nude", "muted-rose", "soft-terracotta"],
+        "eye": ["soft-brown", "warm-taupe", "muted-olive"],
+        "blush": ["soft-peach", "muted-coral"]
+      },
+      "hair_colour_guidance": {
+        "recommend": ["warm-brunette", "soft-auburn", "golden-brown"],
+        "avoid": ["high-contrast-highlights", "platinum", "jet-black"]
+      }
+    },
+
+    "Light Spring": {
+      "undertone": "warm",
+      "contrast": "low",
+      "best_colours": ["#FFFACD", "#FFD1B3", "#B5EAD7", "#FFDDE1", "#C7EEFF", "#F9E0A2"],
+      "avoid_colours": ["#000000", "#8B0000", "#191970"],
+      "clothing_guidance": {
+        "patterns": ["light-floral", "pastel-stripe", "soft-polka-dot"],
+        "fabrics": ["cotton-lawn", "voile", "light-linen"],
+        "avoid_patterns": ["dark-heavy-print", "stark-graphic"]
+      },
+      "makeup_guidance": {
+        "lip": ["light-peach", "baby-pink", "soft-coral"],
+        "eye": ["soft-gold", "light-bronze", "warm-taupe"],
+        "blush": ["light-peach", "baby-pink"]
+      },
+      "hair_colour_guidance": {
+        "recommend": ["light-golden-blonde", "honey-highlights", "strawberry-tints"],
+        "avoid": ["jet-black", "very-dark-brown"]
+      }
+    }
+  },
+
+  "forehead_rules": {
+    "_comment": "Applied when FacialThirds.upperThird deviates from the ideal 0.33 baseline.",
+    "high_forehead": {
+      "condition": "facial_thirds[0] > 0.38",
+      "hairstyle_tags": {
+        "recommend": ["full-fringe", "curtain-bangs", "wispy-fringe", "textured-fringe"],
+        "avoid": ["slicked-back", "very-short-pixie", "receding-fade"]
+      }
+    },
+    "low_forehead": {
+      "condition": "facial_thirds[0] < 0.28",
+      "hairstyle_tags": {
+        "recommend": ["no-fringe", "side-part", "volume-at-crown", "swept-back"],
+        "avoid": ["thick-fringe", "full-heavy-fringe"]
+      }
+    },
+    "balanced_forehead": {
+      "condition": "0.28 <= facial_thirds[0] <= 0.38",
+      "hairstyle_tags": {
+        "recommend": ["curtain-bangs", "no-fringe", "any-parting"],
+        "avoid": []
+      }
+    }
+  },
+
+  "jawline_rules": {
+    "_comment": "Applied based on jawline_angle. Acute angle = sharp jaw; obtuse = soft jaw.",
+    "sharp_jaw": {
+      "condition": "jawline_angle < 120",
+      "hairstyle_tags": {
+        "recommend": ["soft-waves-below-jaw", "curtain-bangs", "long-layers"],
+        "avoid": ["blunt-ends-at-jawline", "severe-geometric-cut"]
+      },
+      "beard_tags": {
+        "recommend": ["stubble"],
+        "avoid": ["sharp-angular-beard"]
+      }
+    },
+    "average_jaw": {
+      "condition": "120 <= jawline_angle <= 140",
+      "hairstyle_tags": {
+        "recommend": ["any"],
+        "avoid": []
+      }
+    },
+    "soft_jaw": {
+      "condition": "jawline_angle > 140",
+      "hairstyle_tags": {
+        "recommend": ["textured-ends-at-jaw", "layered-bob", "chin-grazing-cut"],
+        "avoid": ["very-long-straight"]
+      },
+      "beard_tags": {
+        "recommend": ["defined-beard", "anchor-beard", "goatee"],
+        "avoid": []
+      }
+    }
+  },
+
+  "vertical_proportion_rules": {
+    "long_torso_short_legs": {
+      "condition": "torso_to_leg_ratio > 0.60",
+      "clothing_tags": {
+        "tops": ["cropped", "short-hemline", "untucked-short-top"],
+        "bottoms": ["high-rise", "vertical-stripe", "long-trouser-no-cuff"],
+        "avoid": ["drop-waist", "mid-rise-with-short-top"]
+      }
+    },
+    "short_torso_long_legs": {
+      "condition": "torso_to_leg_ratio < 0.45",
+      "clothing_tags": {
+        "tops": ["longline", "tunic", "hip-skimming", "low-slung-belt"],
+        "bottoms": ["mid-rise", "cropped-trouser", "ankle-crop"],
+        "avoid": ["high-rise-cropped-top-together", "very-long-top-short-bottom"]
+      }
+    },
+    "balanced_proportions": {
+      "condition": "0.45 <= torso_to_leg_ratio <= 0.60",
+      "clothing_tags": {
+        "tops": ["any"],
+        "bottoms": ["any"],
+        "avoid": []
+      }
+    }
+  },
+
+  "combination_rules": {
+    "_comment": "Multi-attribute rules that override single-attribute rules when both conditions are met.",
+    "round_face_apple_body": {
+      "conditions": {
+        "face_shape": "Round",
+        "body_type": "Apple"
+      },
+      "priority": "high",
+      "clothing_tags": {
+        "recommend": [
+          "V-neck-with-long-layers", "monochromatic-column",
+          "empire-line-dress", "vertical-detail-top"
+        ],
+        "avoid": ["horizontal-stripe", "puffed-sleeve", "full-gathered-skirt"]
+      },
+      "hairstyle_tags": {
+        "recommend": ["long-layers-below-shoulder", "side-part"],
+        "avoid": ["bob", "full-fringe"]
+      }
+    },
+    "heart_face_inverted_triangle_body": {
+      "conditions": {
+        "face_shape": "Heart",
+        "body_type": "InvertedTriangle"
+      },
+      "priority": "high",
+      "clothing_tags": {
+        "recommend": [
+          "wide-leg-trouser", "A-line-skirt", "dark-top-light-bottom",
+          "plunging-V-neck-to-balance-forehead"
+        ],
+        "avoid": ["boat-neck", "puffed-sleeve", "embellished-shoulder"]
+      }
+    }
+  },
+
+  "tag_to_product_map": {
+    "_comment": "Maps style tags to product category slugs for the recommendation UI.",
+    "wide-leg-trouser":       { "category": "bottoms",    "search_terms": ["wide leg trousers", "palazzo pants"] },
+    "A-line-skirt":           { "category": "bottoms",    "search_terms": ["A-line skirt", "flared skirt"] },
+    "wrap-top":               { "category": "tops",       "search_terms": ["wrap top", "wrap blouse"] },
+    "fitted-blouse":          { "category": "tops",       "search_terms": ["fitted blouse", "tailored shirt"] },
+    "curtain-bangs":          { "category": "hairstyle",  "search_terms": ["curtain bangs", "Bardot fringe"] },
+    "textured-quiff":         { "category": "hairstyle",  "search_terms": ["textured quiff", "modern quiff"] },
+    "full-fringe":            { "category": "hairstyle",  "search_terms": ["full fringe", "blunt bangs"] },
+    "belted-coat":            { "category": "outerwear",  "search_terms": ["belted coat", "cinched waist coat"] },
+    "rectangle-glasses":      { "category": "accessories","search_terms": ["rectangle glasses frames"] },
+    "statement-earrings":     { "category": "accessories","search_terms": ["statement earrings", "bold earrings"] },
+    "long-pendant-earrings":  { "category": "accessories","search_terms": ["long pendant earrings", "drop earrings"] }
+  },
+
+  "llm_prompt_template": {
+    "_comment": "Template fed to the LLM to generate the Style Narrative. Use {variable} placeholders.",
+    "system_prompt": "You are PersonaStyle, an expert fashion stylist and image consultant. You deliver warm, empowering, and highly specific style guidance based on facial geometry, body proportions, and seasonal colour analysis. Your tone is like a knowledgeable friend — direct, positive, and free of jargon.",
+    "user_prompt_template": "Analyse the following biometric profile and generate a personalised Style Narrative of approximately 300 words. Include: (1) a flattering description of the user's unique features, (2) specific hairstyle guidance with reasons, (3) clothing silhouette guidance with reasons, (4) colour palette advice, and (5) a motivational closing line.\n\nProfile:\n- Face Shape: {face_shape} (confidence {confidence}%)\n- Body Type: {body_type}\n- Seasonal Palette: {season_variant}\n- Facial Thirds: Upper {upper_third}%, Middle {middle_third}%, Lower {lower_third}%\n- Canthal Tilt: {canthal_tilt}°\n- Jawline Angle: {jawline_angle}°\n- Skin Undertone: {skin_undertone}\n- Overall Contrast: {overall_contrast}\n- Age: {age} | Gender: {gender}\n\nTop Recommended Tags:\n- Hairstyles: {hairstyle_tags}\n- Clothing: {clothing_tags}\n- Colours to Wear: {recommended_colours}\n\nGenerate the Style Narrative now:"
+  }
+}
